@@ -6,27 +6,37 @@ import {
   Typography,
   Paper,
 } from '@mui/material';
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { useState } from 'react';
 
 import { useGetTrendsQuery } from './store/moviesApi';
 
 function App() {
-  const [carousel, setCarousel] = useState(4);
+  const [carousel, setCarousel] = useState(0);
 
-  let lastItem = carousel;
-  let firstItem = carousel - 4;
+  let firstItem = carousel;
+  let lastItem = carousel + 5;
+
+  const windowWidth = window.innerWidth;
+  if (windowWidth < 840) {
+    lastItem = carousel + 1;
+  } else if (windowWidth > 840 && windowWidth < 1040) {
+    lastItem = carousel + 3;
+  } else if (windowWidth > 1040 && windowWidth < 1200) {
+    lastItem = carousel + 4;
+  }
+
   const { data, isLoading } = useGetTrendsQuery();
   if (isLoading) return <h1>Loading</h1>;
 
-  console.log(firstItem, lastItem);
   const handleNext = () => {
-    if (carousel < data.results.length) {
+    if (carousel + 5 < data.results.length) {
       setCarousel(carousel + 1);
     }
   };
 
   const handlePrev = () => {
-    if (carousel - 4 > 0) {
+    if (carousel > 0) {
       setCarousel(carousel - 1);
     }
   };
@@ -45,13 +55,13 @@ function App() {
       <Box
         sx={{
           display: 'flex',
-          flexWrap: 'wrap',
           justifyContent: 'center',
+          alignItems: 'center',
           gap: 1,
         }}
       >
         <Button variant="outlined" onClick={handlePrev}>
-          Prev
+          <ArrowBack />
         </Button>
         {data.results.slice(firstItem, lastItem).map((item) => (
           <Box key={item.id}>
@@ -63,7 +73,7 @@ function App() {
           </Box>
         ))}
         <Button variant="outlined" onClick={handleNext}>
-          Next
+          <ArrowForward />
         </Button>
       </Box>
     </Container>
