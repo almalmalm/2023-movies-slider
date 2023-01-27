@@ -43,10 +43,6 @@ function App() {
 
   return (
     <Container sx={{ height: '100vh' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Input />
-        <Button variant="outlined">Search</Button>
-      </Box>
       <Box>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
           Trending
